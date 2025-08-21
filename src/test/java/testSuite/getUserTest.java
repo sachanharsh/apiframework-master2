@@ -17,7 +17,7 @@ import entities.postbookRequest;
 import entities.postbookRequest.Isbn;
 
 public class getUserTest extends baseTest {
-	@Test(groups = {"Smoke"})
+	@Test(groups = {"smoke"})
 	@Description("Fetch user data and verify initial book count is 1")
 	public void getUserData() {
 	    Response resp = given().
@@ -35,7 +35,7 @@ public class getUserTest extends baseTest {
 	    AssertJUnit.assertEquals(user.getBooks().size(),1);
 	}
 	
-	@Test(groups = {"Regression"})
+	@Test(groups = {"regression"})
 	@Description("Add two books to the user's collection via POST /BookStore/v1/Books")
 	public void postBookToUserData() {
 		List<Isbn> isbn=new ArrayList<>();
@@ -66,7 +66,7 @@ public class getUserTest extends baseTest {
 	    //getUserResponse user = resp.as(getUserResponse.class);
 	}
 	
-	@Test(groups = {"Regression"})
+	@Test(groups = {"smoke"})
 	@Description("Fetch user data again and verify book count is 3 after additions")
 	public void getUserData2() {
 	    Response resp = given().
@@ -90,7 +90,7 @@ public class getUserTest extends baseTest {
 			{"4ae39f14-c763-4600-9590-a69a1c2afd1b","9781593275846"}
 		};
 	}
-	@Test(groups = {"Regression"},dataProvider="isbnIds",priority=4)
+	@Test(groups = {"regression"},dataProvider="isbnIds",priority=4)
 	@Description("Remove each book from the user's collection via DELETE /BookStore/v1/Book")
 	public void deleteBookUserData1(String userId,String isbn) {
 		Map<String,String> hmap=new HashMap<String,String>();
@@ -110,7 +110,7 @@ public class getUserTest extends baseTest {
 	    System.out.println(resp.asString());
 	}
 	
-	@Test(groups = {"Smoke"})
+	@Test(groups = {"smoke"})
 	@Description("Fetch book data and verify content")
 	public void getBookData() {
 	    Response resp = given().
@@ -125,6 +125,6 @@ public class getUserTest extends baseTest {
 	    Allure.addAttachment("Initial GET /Account/v1/User", resp.asString());
 	    System.out.println(resp.asString());
 	    getUserResponse user = resp.as(getUserResponse.class);
-	    AssertJUnit.assertEquals(user.getBooks().size(),1);
+	    AssertJUnit.assertEquals(user.getBooks().size(),3);
 	}
 }

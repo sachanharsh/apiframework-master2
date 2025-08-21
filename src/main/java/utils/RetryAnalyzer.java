@@ -1,14 +1,14 @@
 package utils;
 
-import org.testng.IRetryAnalyzer;
-import org.testng.ITestResult;
+//import org.testng.IRetryAnalyzer;
+//import org.testng.ITestResult;
 
-public class RetryAnalyzer implements IRetryAnalyzer{
+public class RetryAnalyzer{
 
 	private int count=0;
 	private static final int MAX_RETRIES=3;
-	@Override
-	public boolean retry(ITestResult result) {
+
+	public boolean retry() {
 		// TODO Auto-generated method stub
 		if(count<MAX_RETRIES) {
 			count++;

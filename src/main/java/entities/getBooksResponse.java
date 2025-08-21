@@ -18,6 +18,8 @@ public class getBooksResponse {
 
     @Getter
     @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Book {
         private String isbn;
         private String title;

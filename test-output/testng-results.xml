@@ -1,29 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results total="6" passed="6" failed="0" skipped="0">
+<testng-results ignored="0" total="6" passed="5" failed="1" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2025-08-21T15:29:51Z" name="Suite" finished-at="2025-08-21T15:29:58Z" duration-ms="7112">
+  <suite started-at="2025-08-21T21:32:54 IST" name="Suite" finished-at="2025-08-21T21:33:00 IST" duration-ms="6811">
     <groups>
+      <group name="regression">
+        <method signature="getUserTest.postBookToUserData()[pri:0, instance:testSuite.getUserTest@1b919693]" name="postBookToUserData" class="testSuite.getUserTest"/>
+        <method signature="getUserTest.deleteBookUserData1(java.lang.String,java.lang.String)[pri:4, instance:testSuite.getUserTest@1b919693]" name="deleteBookUserData1" class="testSuite.getUserTest"/>
+      </group> <!-- regression -->
+      <group name="smoke">
+        <method signature="getUserTest.getBookData()[pri:0, instance:testSuite.getUserTest@1b919693]" name="getBookData" class="testSuite.getUserTest"/>
+        <method signature="getUserTest.getUserData()[pri:0, instance:testSuite.getUserTest@1b919693]" name="getUserData" class="testSuite.getUserTest"/>
+        <method signature="getUserTest.getUserData2()[pri:0, instance:testSuite.getUserTest@1b919693]" name="getUserData2" class="testSuite.getUserTest"/>
+      </group> <!-- smoke -->
     </groups>
-    <test started-at="2025-08-21T15:29:51Z" name="Test" finished-at="2025-08-21T15:29:58Z" duration-ms="7112">
+    <test started-at="2025-08-21T21:32:54 IST" name="Test" finished-at="2025-08-21T21:33:00 IST" duration-ms="6811">
       <class name="testSuite.getUserTest">
-        <test-method is-config="true" signature="setup()[pri:0, instance:testSuite.getUserTest@2d710f1a]" started-at="2025-08-21T20:59:51Z" name="setup" finished-at="2025-08-21T20:59:53Z" duration-ms="2028" status="PASS">
+        <test-method is-config="true" signature="setup()[pri:0, instance:testSuite.getUserTest@1b919693]" started-at="2025-08-21T21:32:54 IST" name="setup" finished-at="2025-08-21T21:32:56 IST" duration-ms="2141" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setup -->
-        <test-method signature="getUserData()[pri:0, instance:testSuite.getUserTest@2d710f1a]" started-at="2025-08-21T20:59:53Z" name="getUserData" finished-at="2025-08-21T20:59:54Z" duration-ms="1175" status="PASS">
+        <test-method signature="getBookData()[pri:0, instance:testSuite.getUserTest@1b919693]" started-at="2025-08-21T21:32:56 IST" name="getBookData" finished-at="2025-08-21T21:32:56 IST" duration-ms="679" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getBookData -->
+        <test-method signature="getUserData()[pri:0, instance:testSuite.getUserTest@1b919693]" started-at="2025-08-21T21:32:56 IST" name="getUserData" finished-at="2025-08-21T21:32:57 IST" duration-ms="568" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- getUserData -->
-        <test-method signature="postBookToUserData()[pri:0, instance:testSuite.getUserTest@2d710f1a]" started-at="2025-08-21T20:59:54Z" name="postBookToUserData" finished-at="2025-08-21T20:59:55Z" duration-ms="1208" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- postBookToUserData -->
-        <test-method signature="getUserData2()[pri:0, instance:testSuite.getUserTest@2d710f1a]" started-at="2025-08-21T20:59:55Z" name="getUserData2" finished-at="2025-08-21T20:59:56Z" duration-ms="589" status="PASS">
+        <test-method signature="getUserData2()[pri:0, instance:testSuite.getUserTest@1b919693]" started-at="2025-08-21T21:32:57 IST" name="getUserData2" finished-at="2025-08-21T21:32:58 IST" duration-ms="577" status="FAIL">
+          <exception class="java.lang.AssertionError">
+            <message>
+              <![CDATA[expected:<1> but was:<3>]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[java.lang.AssertionError: expected:<1> but was:<3>
+at org.testng.AssertJUnit.fail(AssertJUnit.java:65)
+at org.testng.AssertJUnit.failNotEquals(AssertJUnit.java:467)
+at org.testng.AssertJUnit.assertEquals(AssertJUnit.java:88)
+at org.testng.AssertJUnit.assertEquals(AssertJUnit.java:318)
+at org.testng.AssertJUnit.assertEquals(AssertJUnit.java:328)
+at testSuite.getUserTest.getUserData2(getUserTest.java:84)
+at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
+at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:686)
+at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:230)
+at org.testng.internal.invokers.MethodRunner.runInSequence(MethodRunner.java:63)
+at org.testng.internal.invokers.TestInvoker$MethodInvocationAgent.invoke(TestInvoker.java:992)
+at org.testng.internal.invokers.TestInvoker.invokeTestMethods(TestInvoker.java:203)
+at org.testng.internal.invokers.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:154)
+at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:134)
+at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+at org.testng.TestRunner.privateRun(TestRunner.java:739)
+at org.testng.TestRunner.run(TestRunner.java:614)
+at org.testng.SuiteRunner.runTest(SuiteRunner.java:421)
+at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:413)
+at org.testng.SuiteRunner.privateRun(SuiteRunner.java:373)
+at org.testng.SuiteRunner.run(SuiteRunner.java:312)
+at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:95)
+at org.testng.TestNG.runSuitesSequentially(TestNG.java:1274)
+at org.testng.TestNG.runSuitesLocally(TestNG.java:1208)
+at org.testng.TestNG.runSuites(TestNG.java:1112)
+at org.testng.TestNG.run(TestNG.java:1079)
+at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
+at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:293)
+at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
+]]>
+            </full-stacktrace>
+          </exception> <!-- java.lang.AssertionError -->
           <reporter-output>
           </reporter-output>
         </test-method> <!-- getUserData2 -->
-        <test-method signature="deleteBookUserData1(java.lang.String, java.lang.String)[pri:0, instance:testSuite.getUserTest@2d710f1a]" started-at="2025-08-21T20:59:56Z" name="deleteBookUserData1" data-provider="isbnIds" finished-at="2025-08-21T20:59:56Z" duration-ms="733" status="PASS">
+        <test-method signature="postBookToUserData()[pri:0, instance:testSuite.getUserTest@1b919693]" started-at="2025-08-21T21:32:58 IST" name="postBookToUserData" finished-at="2025-08-21T21:32:59 IST" duration-ms="1226" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- postBookToUserData -->
+        <test-method signature="deleteBookUserData1(java.lang.String,java.lang.String)[pri:4, instance:testSuite.getUserTest@1b919693]" started-at="2025-08-21T21:32:59 IST" name="deleteBookUserData1" data-provider="isbnIds" finished-at="2025-08-21T21:33:00 IST" duration-ms="827" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -39,7 +93,7 @@
           <reporter-output>
           </reporter-output>
         </test-method> <!-- deleteBookUserData1 -->
-        <test-method signature="deleteBookUserData1(java.lang.String, java.lang.String)[pri:0, instance:testSuite.getUserTest@2d710f1a]" started-at="2025-08-21T20:59:56Z" name="deleteBookUserData1" data-provider="isbnIds" finished-at="2025-08-21T20:59:57Z" duration-ms="754" status="PASS">
+        <test-method signature="deleteBookUserData1(java.lang.String,java.lang.String)[pri:4, instance:testSuite.getUserTest@1b919693]" started-at="2025-08-21T21:33:00 IST" name="deleteBookUserData1" data-provider="isbnIds" finished-at="2025-08-21T21:33:00 IST" duration-ms="722" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -55,10 +109,6 @@
           <reporter-output>
           </reporter-output>
         </test-method> <!-- deleteBookUserData1 -->
-        <test-method signature="getBookData()[pri:0, instance:testSuite.getUserTest@2d710f1a]" started-at="2025-08-21T20:59:57Z" name="getBookData" finished-at="2025-08-21T20:59:58Z" duration-ms="583" status="PASS">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- getBookData -->
       </class> <!-- testSuite.getUserTest -->
     </test> <!-- Test -->
   </suite> <!-- Suite -->

@@ -29,7 +29,7 @@ public class getBooksTest extends baseTest {
         Assert.assertTrue(getBooksResponse.getBooks().size()>0);
     }
     
-	@Test(priority=2,retryAnalyzer=RetryAnalyzer.class)
+	@Test(priority=2)
 	@Description("Fetch book data and verify content")
 	public void getBookData() {
 	    Response resp = given().

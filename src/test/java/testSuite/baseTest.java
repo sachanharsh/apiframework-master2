@@ -13,7 +13,7 @@ public abstract class baseTest {
 	protected RequestSpecification spec;
 	private static final PropertiesReader propertiesReader = new PropertiesReader();
 	
-	@BeforeClass
+	@BeforeClass(groups = { "regression","smoke" })
 	public void setup() {
 		String HOST=propertiesReader.getHost();
 		
