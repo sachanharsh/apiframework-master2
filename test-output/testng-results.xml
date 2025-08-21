@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results total="6" passed="6" failed="0" skipped="0">
+  <reporter-output>
+  </reporter-output>
+  <suite started-at="2025-08-21T15:29:51Z" name="Suite" finished-at="2025-08-21T15:29:58Z" duration-ms="7112">
+    <groups>
+    </groups>
+    <test started-at="2025-08-21T15:29:51Z" name="Test" finished-at="2025-08-21T15:29:58Z" duration-ms="7112">
+      <class name="testSuite.getUserTest">
+        <test-method is-config="true" signature="setup()[pri:0, instance:testSuite.getUserTest@2d710f1a]" started-at="2025-08-21T20:59:51Z" name="setup" finished-at="2025-08-21T20:59:53Z" duration-ms="2028" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setup -->
+        <test-method signature="getUserData()[pri:0, instance:testSuite.getUserTest@2d710f1a]" started-at="2025-08-21T20:59:53Z" name="getUserData" finished-at="2025-08-21T20:59:54Z" duration-ms="1175" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getUserData -->
+        <test-method signature="postBookToUserData()[pri:0, instance:testSuite.getUserTest@2d710f1a]" started-at="2025-08-21T20:59:54Z" name="postBookToUserData" finished-at="2025-08-21T20:59:55Z" duration-ms="1208" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- postBookToUserData -->
+        <test-method signature="getUserData2()[pri:0, instance:testSuite.getUserTest@2d710f1a]" started-at="2025-08-21T20:59:55Z" name="getUserData2" finished-at="2025-08-21T20:59:56Z" duration-ms="589" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getUserData2 -->
+        <test-method signature="deleteBookUserData1(java.lang.String, java.lang.String)[pri:0, instance:testSuite.getUserTest@2d710f1a]" started-at="2025-08-21T20:59:56Z" name="deleteBookUserData1" data-provider="isbnIds" finished-at="2025-08-21T20:59:56Z" duration-ms="733" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[4ae39f14-c763-4600-9590-a69a1c2afd1b]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[9781593277574]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- deleteBookUserData1 -->
+        <test-method signature="deleteBookUserData1(java.lang.String, java.lang.String)[pri:0, instance:testSuite.getUserTest@2d710f1a]" started-at="2025-08-21T20:59:56Z" name="deleteBookUserData1" data-provider="isbnIds" finished-at="2025-08-21T20:59:57Z" duration-ms="754" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[4ae39f14-c763-4600-9590-a69a1c2afd1b]]>
+              </value>
+            </param>
+            <param index="1">
+              <value>
+                <![CDATA[9781593275846]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- deleteBookUserData1 -->
+        <test-method signature="getBookData()[pri:0, instance:testSuite.getUserTest@2d710f1a]" started-at="2025-08-21T20:59:57Z" name="getBookData" finished-at="2025-08-21T20:59:58Z" duration-ms="583" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getBookData -->
+      </class> <!-- testSuite.getUserTest -->
+    </test> <!-- Test -->
+  </suite> <!-- Suite -->
+</testng-results>

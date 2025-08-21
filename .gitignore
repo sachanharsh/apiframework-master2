@@ -1,0 +1,24 @@
+# Misc
+.settings/*
+.DS_Store
+dump.rdb
+
+# VCS
+.git/
+
+# IDEA Editor specific files
+.idea/
+*.iml
+.classpath
+.project
+
+# Generated files
+classes/
+out/
+bin/*
+generated-test-sources/
+build
+.gradle/
+target/
+*.class
+

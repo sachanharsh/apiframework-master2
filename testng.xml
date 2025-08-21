@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="Suite">
+  <test thread-count="5" name="Test">
+  	 <!--<groups>
+      <run>
+        <include name="testTag"/>
+        <exclude name="regression"/>
+      </run>
+    </groups>-->
+    <classes>
+      <!--<class name="testSuite.SauceDemoTest"/>-->
+      <class name="testSuite.getUserTest"/>
+      <!--<class name="testSuite.getBooksTest"/>-->
+    </classes>
+  </test> <!-- Test -->
+</suite> <!-- Suite -->
