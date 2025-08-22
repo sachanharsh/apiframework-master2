@@ -5,7 +5,9 @@ pipeline {
     jdk 'temurin-21'     // must match the name you set under JDK installations
     maven 'maven-3.9'    // must match the name you set under Maven installations
   }
-
+  
+  options { skipDefaultCheckout(true) } 
+  
   parameters {
     choice(name: 'GROUP', choices: ['smoke','regression'], description: 'TestNG group to run2')
     
@@ -26,7 +28,11 @@ pipeline {
   post {
     always {
       junit '**/target/surefire-reports/*.xml'
-      archiveArtifacts artifacts: 'target/**/*', allowEmptyArchive: true
+      allure([
+        includeProperties: false,
+        jdk: '',
+        results: [[path: 'target/allure-results']]
+      ])
     }
   }
 }

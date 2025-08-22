@@ -86,8 +86,17 @@
         <suiteXmlFiles>
           <suiteXmlFile>testng.xml</suiteXmlFile>
         </suiteXmlFiles>
+        <properties>
+          <property>
+            <name>listener</name>
+            <value>io.qameta.allure.testng.AllureTestNg</value>
+          </property>
+        </properties>
+        <systemPropertyVariables>
+          <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
+        </systemPropertyVariables>
       </configuration>
     </plugin>
   </plugins>
-</build>
+  </build>
 </project>
