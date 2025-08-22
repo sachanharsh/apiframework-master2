@@ -7,7 +7,7 @@ pipeline {
   }
 
   parameters {
-    choice(name: 'GROUP', choices: ['smoke','regression'], description: 'TestNG group to run')
+    choice(name: 'GROUP', choices: ['smoke','regression'], description: 'TestNG group to run2')
     
   }
 
