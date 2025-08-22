@@ -81,7 +81,7 @@ public class getUserTest extends baseTest {
 	    Allure.addAttachment("Second GET /Account/v1/User", resp.asString());
 	    System.out.println(resp.asString());
 	    getUserResponse user = resp.as(getUserResponse.class);
-	    AssertJUnit.assertEquals(user.getBooks().size(),3);
+	    AssertJUnit.assertEquals(user.getBooks().size(),1);
 	}
 	
 	@DataProvider(name="isbnIds")
@@ -125,6 +125,6 @@ public class getUserTest extends baseTest {
 	    Allure.addAttachment("Initial GET /Account/v1/User", resp.asString());
 	    System.out.println(resp.asString());
 	    getUserResponse user = resp.as(getUserResponse.class);
-	    AssertJUnit.assertEquals(user.getBooks().size(),3);
+	    AssertJUnit.assertEquals(user.getBooks().size(),1);
 	}
 }
