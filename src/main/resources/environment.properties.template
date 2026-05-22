@@ -1,0 +1,4 @@
+host=https://demoqa.com
+user.name=YOUR_USERNAME
+user.password=YOUR_PASSWORD
+user.browser=chrome

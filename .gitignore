@@ -22,3 +22,10 @@ build
 target/
 *.class
 
+# Test reports (auto-generated on each run)
+allure-results/
+test-output/
+
+# Credentials — never commit real values
+src/main/resources/environment.properties
+
