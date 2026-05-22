@@ -1,0 +1,32 @@
+meta {
+  name: Add Books - Invalid ISBN (400)
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/BookStore/v1/Books
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "userId": "{{userId}}",
+    "collectionOfIsbns": [
+      { "isbn": "0000000000000" }
+    ]
+  }
+}
+
+tests {
+  res.status == 400
+}

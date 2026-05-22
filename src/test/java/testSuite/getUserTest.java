@@ -3,10 +3,8 @@ package testSuite;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import org.testng.AssertJUnit;
-import static io.restassured.RestAssured.given;
-
 import org.testng.Assert;
-import org.testng.annotations.Test;
+import static io.restassured.RestAssured.given;
 
 import entities.getUserResponse;
 import io.qameta.allure.Allure;

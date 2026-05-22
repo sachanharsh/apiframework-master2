@@ -1,0 +1,27 @@
+meta {
+  name: Generate Token
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/Account/v1/GenerateToken
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "userName": "{{username}}",
+    "password": "{{password}}"
+  }
+}
+
+tests {
+  res.status == 200
+  res.body.token != null
+}

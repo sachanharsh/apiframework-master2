@@ -23,6 +23,16 @@ pipeline {
         sh 'mvn -B clean test -Dgroups=${GROUP}'
       }
     }
+    
+    stage('Smoke (trigger automation job)') {
+      steps {
+         script {
+            build job: 'smoke3',
+                  wait: true,          // block until it finishes
+                  propagate: true      // fail this pipeline if smoke3 fails
+         }
+      }
+    }
   }
 
   post {

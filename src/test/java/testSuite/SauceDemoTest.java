@@ -1,10 +1,14 @@
 package testSuite;
 
 import java.time.Duration;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementClickInterceptedException;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
@@ -14,6 +18,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -23,7 +29,10 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import utils.ConfigManager;
 
 class RetryAnalyzer implements IRetryAnalyzer{
 	private int retry=0;
@@ -45,7 +54,7 @@ class MyWebDriverManager{
 	
 	
 	private MyWebDriverManager() {
-		//getDriver();
+		getDriver();
 	}
 	
 	public static synchronized MyWebDriverManager getInstance() {
@@ -57,8 +66,8 @@ class MyWebDriverManager{
 	public WebDriver getDriver() {
 		if (tlDriver.get() == null) {
             //WebDriverManager.chromedriver().setup();
-            //tlDriver.set(createDriver());
-            tlDriver.set(new ChromeDriver());
+            tlDriver.set(createDriver());
+            //tlDriver.set(new ChromeDriver());
             // driver.manage().timeouts().implicitlyWait(...); // if you want
             // driver.manage().window().maximize();
         }
@@ -73,7 +82,9 @@ class MyWebDriverManager{
     }
     
     public WebDriver createDriver() {
-    	String browser = System.getProperty("browser", "error").toLowerCase();
+    	//String browser = System.getProperty("browser", "error").toLowerCase();
+    	//String browser = "edge";
+    	String browser = ConfigManager.getInstance().get("user.browser");
         switch (browser) {
             case "chrome": {
                 ChromeOptions opts = new ChromeOptions();
@@ -93,20 +104,6 @@ class MyWebDriverManager{
     }
 }
 
-abstract class BaseTest3{
-	protected WebDriver driver;
-	
-	@BeforeClass
-	public void setup() {
-		driver=MyWebDriverManager.getInstance().getDriver();
-	}
-	@AfterClass
-	public void tearDown() {
-		if(driver!=null)
-			MyWebDriverManager.getInstance().quitDriver();
-	}
-}
-
 abstract class BasePage {
     protected final WebDriver driver;
     private static final Duration TIMEOUT       = Duration.ofSeconds(10);
@@ -117,20 +114,41 @@ abstract class BasePage {
         this.driver = driver;
     }
 
+    private void dismissJsAlertIfPresent() {
+        try {
+        	Thread.sleep(Duration.ofMillis(3000));
+            WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(1));
+            //Alert alert = shortWait.until(ExpectedConditions.alertIsPresent());
+            //alert.dismiss(); // or accept()
+        } catch (TimeoutException ignored) { } catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
     protected WebElement safeFind(By locator) {
-        WebDriverWait wait = new WebDriverWait(driver, TIMEOUT);
-        wait.pollingEvery(POLL_INTERVAL)
+    	WebDriverWait wait = new WebDriverWait(driver, TIMEOUT);
+    	try{
+    		dismissJsAlertIfPresent();
+    		wait.pollingEvery(POLL_INTERVAL)
             .ignoring(NoSuchElementException.class);
         return wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(locator)));
+    	}
+    	catch(TimeoutException e) {
+    		throw new TimeoutException("Timed out waiting for: " + locator, e);
+    	}
     }
 
-    protected void clickWhenReady(By locator) {
+    protected void clickWhenReady(By locator) throws InterruptedException {
         int attempts = 0;
+        dismissJsAlertIfPresent();
         while (true) {
             try {
                 safeFind(locator).click();
                 return;
             } catch (ElementClickInterceptedException | TimeoutException e) {
+            	//Thread.sleep(Duration.ofSeconds(10));
+            	//driver.switchTo().alert().dismiss();
             	if (++attempts >= CLICK_RETRIES) {
                     throw new RuntimeException(
                         "Failed to type into " + locator + " after " + CLICK_RETRIES + " attempts", e);
@@ -177,18 +195,22 @@ abstract class BasePage {
 }
 
 class LoginPage extends BasePage{
+	
 	private By userId=By.id("user-name");
-	private By pass=By.id("password");
+	@FindBy(id="password")
+	private WebElement pass;
+	//private By pass=By.id("password");
 	private By submit=By.id("login-button");
 	private By errorBanner = By.cssSelector(".error-message-container.error");
 	
 	public LoginPage(WebDriver driver) {
 		super(driver);
+		PageFactory.initElements(driver,this);
 	}
 	
 	public ProductsPage getLogin() {
 		driver.findElement(userId).sendKeys("standard_user");
-		driver.findElement(pass).sendKeys("secret_sauce");
+		pass.sendKeys("secret_sauce");
 		driver.findElement(submit).click();
 		return new ProductsPage(driver);
 		
@@ -241,23 +263,38 @@ class CartPage extends BasePage{
 	}
 	
 	public Pair<String,String> getFirstProductDetailsFromCart() {
-		String name=driver.findElement(firstProductCartName).getText();
-		String price=driver.findElement(firstProductCartPrice).getText();
+		String name=safeFind(firstProductCartName).getText();
+		String price=safeFind(firstProductCartPrice).getText();
 		return Pair.of(name, price);
 		
 	}
 	
-	public void doLogout() {
+	public void doLogout() throws InterruptedException {
 		driver.findElement(menu).click();
 		//driver.findElement(logout).click();
 		clickWhenReady(logout);
 	}
 }
+
+abstract class BaseTest3{
+	protected WebDriver driver;
+	
+	@BeforeClass
+	public void setup() {
+		driver=MyWebDriverManager.getInstance().getDriver();
+	}
+	@AfterClass
+	public void tearDown() {
+		if(driver!=null)
+			MyWebDriverManager.getInstance().quitDriver();
+	}
+}
+
 public class SauceDemoTest extends BaseTest3 {
 	
 	
 	@Test
-	public void fullFlowTest() {
+	public void fullFlowTest() throws InterruptedException {
 		
 		driver.get("https://www.saucedemo.com");
 		LoginPage login=new LoginPage(driver);
@@ -272,5 +309,67 @@ public class SauceDemoTest extends BaseTest3 {
 //		LoginPage loginPageAfterLogout = new LoginPage(driver);
 //		Assert.assertTrue(loginPageAfterLogout.isAt(),"Should land on login page");
 	}
+	
+	@Test
+	public void amazonTest() throws JsonProcessingException {
+		driver.get("https://www.amazon.in");
+		//data-component-type="s-search-result"
+		WebElement search=driver.findElement(By.id("twotabsearchtextbox"));
+		search.sendKeys("iphone"+Keys.ENTER);
+		List<WebElement> list=driver.findElements(By.xpath("//div[@data-component-type='s-search-result']"));
+		Assert.assertEquals(list.size(), 18);
+		Map<String,String> mobile=new LinkedHashMap<>();
+		for(WebElement elem:list) {
+			String name=elem.findElement(By.xpath(".//span[contains(text(),'iPhone')]")).getText();
+			mobile.put(name,null);
+			//String price=elem.findElement(By.xpath(".//span[@class='a-price-whole']")).getText();
+			List<WebElement> priceElems = elem.findElements(By.xpath(".//span[@class='a-price-whole']"));
+		    if (priceElems.isEmpty()) {
+		        //System.out.println("Skipping " + name + " (no price shown)");
+		        continue;
+		    }
+
+		    String price = priceElems.get(0).getText();
+			mobile.put(name,price);
+		}
+		System.out.println(mobile);
+		ObjectMapper mp=new ObjectMapper();
+		System.out.println(mp.writeValueAsString(mobile));
+		
+		
+	}
+	// //div[.//*[contains(text(),'Apple')] and .//*[@data-id]]
+	@Test
+	public void flipkartTest() throws JsonProcessingException {
+		driver.get("https://www.flipkart.com");
+		//data-component-type="s-search-result"
+		WebElement search=driver.findElement(By.xpath("//input[@name='q']"));
+		search.sendKeys("iphone"+Keys.ENTER);
+		List<WebElement> list=driver.findElements(By.xpath("//div[@data-component-type='s-search-result']"));
+		Assert.assertEquals(list.size(), 18);
+		Map<String,String> mobile=new LinkedHashMap<>();
+		for(WebElement elem:list) {
+			String name=elem.findElement(By.xpath(".//span[contains(text(),'iPhone')]")).getText();
+			mobile.put(name,null);
+			//String price=elem.findElement(By.xpath(".//span[@class='a-price-whole']")).getText();
+			List<WebElement> priceElems = elem.findElements(By.xpath(".//span[@class='a-price-whole']"));
+		    if (priceElems.isEmpty()) {
+		        //System.out.println("Skipping " + name + " (no price shown)");
+		        continue;
+		    }
+
+		    String price = priceElems.get(0).getText();
+			mobile.put(name,price);
+		}
+		System.out.println(mobile);
+		ObjectMapper mp=new ObjectMapper();
+		System.out.println(mp.writeValueAsString(mobile));
+		
+		
+	}
+	
+//		Connection conn=DriverManager.getConnection(host, username,password);
+//		Statement stmt=conn.createStatement();
+//		ResultSet rt=stmt.executeQuery("")
 
 }

@@ -1,18 +1,14 @@
 package testSuite;
 
 import org.testng.Assert;
-import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
 import io.qameta.allure.Allure;
 import io.qameta.allure.Description;
 import io.restassured.response.Response;
-import org.testng.annotations.Test;
 import properties.bookStoreProperties;
-import utils.RetryAnalyzer;
 import entities.getBooksResponse;
 import entities.getBooksResponse.Book;
-import entities.getUserResponse;
 
 import static io.restassured.RestAssured.given;
 

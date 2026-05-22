@@ -1,0 +1,30 @@
+meta {
+  name: Delete a Book from User
+  type: http
+  seq: 6
+}
+
+delete {
+  url: {{baseUrl}}/BookStore/v1/Book
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "userId": "{{userId}}",
+    "isbn": "9781593277574"
+  }
+}
+
+tests {
+  res.status == 204
+}

@@ -1,0 +1,33 @@
+meta {
+  name: Add Books to User
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/BookStore/v1/Books
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "userId": "{{userId}}",
+    "collectionOfIsbns": [
+      { "isbn": "9781593277574" },
+      { "isbn": "9781593275846" }
+    ]
+  }
+}
+
+tests {
+  res.status == 201
+}
