@@ -127,4 +127,76 @@ public class getUserTest extends baseTest {
 	    getUserResponse user = resp.as(getUserResponse.class);
 	    AssertJUnit.assertEquals(user.getBooks().size(),1);
 	}
+
+	@Test(groups = {"regression"})
+	@Description("Get user with invalid userId should return 401")
+	public void getUserWithInvalidId() {
+	    Response resp = given()
+	            .contentType("application/json")
+	            .spec(spec)
+	            .when()
+	            .get("/Account/v1/User/invalid-user-id-00000")
+	            .then()
+	            .statusCode(401)
+	            .extract()
+	            .response();
+	    Allure.addAttachment("GET invalid userId response", resp.asString());
+	    System.out.println("Invalid userId response: " + resp.asString());
+	}
+
+	@Test(groups = {"regression"})
+	@Description("Post a book with invalid ISBN should return 400")
+	public void postBookWithInvalidISBN() {
+	    List<Isbn> isbn = new ArrayList<>();
+	    isbn.add(new Isbn("0000000000000"));
+	    postbookRequest body = new postbookRequest("4ae39f14-c763-4600-9590-a69a1c2afd1b", isbn);
+	    Response resp = given()
+	            .contentType("application/json")
+	            .spec(spec)
+	            .body(body).log().all()
+	            .when()
+	            .post("/BookStore/v1/Books")
+	            .then().log().all()
+	            .statusCode(400)
+	            .extract()
+	            .response();
+	    Allure.addAttachment("POST invalid ISBN response", resp.asString());
+	    System.out.println("Invalid ISBN POST response: " + resp.asString());
+	}
+
+	@Test(groups = {"regression"}, priority = 5)
+	@Description("Delete all books for the user via DELETE /BookStore/v1/Books")
+	public void deleteAllBooksForUser() {
+	    Response resp = given()
+	            .contentType("application/json")
+	            .spec(spec)
+	            .queryParam("UserId", "4ae39f14-c763-4600-9590-a69a1c2afd1b")
+	            .when()
+	            .delete("/BookStore/v1/Books")
+	            .then()
+	            .statusCode(204)
+	            .extract()
+	            .response();
+	    Allure.addAttachment("DELETE all books response", resp.asString());
+	    System.out.println("Delete all books response: " + resp.asString());
+	}
+
+	@Test(groups = {"smoke"})
+	@Description("Verify userId and username are present in GET user response")
+	public void verifyUserFields() {
+	    Response resp = given()
+	            .contentType("application/json")
+	            .spec(spec)
+	            .when()
+	            .get("/Account/v1/User/4ae39f14-c763-4600-9590-a69a1c2afd1b")
+	            .then()
+	            .statusCode(200)
+	            .extract()
+	            .response();
+	    Allure.addAttachment("GET user fields response", resp.asString());
+	    getUserResponse user = resp.as(getUserResponse.class);
+	    AssertJUnit.assertNotNull(user.getUserId());
+	    AssertJUnit.assertNotNull(user.getUsername());
+	}
+
 }

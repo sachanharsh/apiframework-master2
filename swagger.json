@@ -1,0 +1,331 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "DemoQA BookStore API",
+    "description": "API documentation for the DemoQA BookStore and Account endpoints used in the apiframework-master2 test suite.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://demoqa.com",
+      "description": "DemoQA production server"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "GenerateTokenRequest": {
+        "type": "object",
+        "required": ["userName", "password"],
+        "properties": {
+          "userName": { "type": "string", "example": "demo1qa1" },
+          "password": { "type": "string", "example": "Password@123" }
+        }
+      },
+      "GenerateTokenResponse": {
+        "type": "object",
+        "properties": {
+          "token":   { "type": "string", "example": "eyJhbGciOiJIUzI1NiIsInR5..." },
+          "expires": { "type": "string", "format": "date-time", "example": "2025-08-03T14:25:30.000Z" },
+          "status":  { "type": "string", "example": "Success" },
+          "result":  { "type": "string", "example": "User authorized successfully." }
+        }
+      },
+      "Book": {
+        "type": "object",
+        "properties": {
+          "isbn":         { "type": "string", "example": "9781593277574" },
+          "title":        { "type": "string", "example": "Understanding ECMAScript 6" },
+          "subTitle":     { "type": "string" },
+          "author":       { "type": "string", "example": "Nicholas C. Zakas" },
+          "publish_date": { "type": "string", "format": "date-time" },
+          "publisher":    { "type": "string", "example": "No Starch Press" },
+          "pages":        { "type": "integer", "example": 352 },
+          "description":  { "type": "string" },
+          "website":      { "type": "string", "example": "https://leanpub.com/understandinges6" }
+        }
+      },
+      "GetBooksResponse": {
+        "type": "object",
+        "properties": {
+          "books": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Book" }
+          }
+        }
+      },
+      "GetUserResponse": {
+        "type": "object",
+        "properties": {
+          "userId":   { "type": "string", "example": "4ae39f14-c763-4600-9590-a69a1c2afd1b" },
+          "username": { "type": "string", "example": "demo1qa1" },
+          "books": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Book" }
+          }
+        }
+      },
+      "IsbnItem": {
+        "type": "object",
+        "required": ["isbn"],
+        "properties": {
+          "isbn": { "type": "string", "example": "9781593277574" }
+        }
+      },
+      "PostBooksRequest": {
+        "type": "object",
+        "required": ["userId", "collectionOfIsbns"],
+        "properties": {
+          "userId": { "type": "string", "example": "4ae39f14-c763-4600-9590-a69a1c2afd1b" },
+          "collectionOfIsbns": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/IsbnItem" }
+          }
+        }
+      },
+      "PostBooksResponse": {
+        "type": "object",
+        "properties": {
+          "books": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/IsbnItem" }
+          }
+        }
+      },
+      "DeleteBookRequest": {
+        "type": "object",
+        "required": ["userId", "isbn"],
+        "properties": {
+          "userId": { "type": "string", "example": "4ae39f14-c763-4600-9590-a69a1c2afd1b" },
+          "isbn":   { "type": "string", "example": "9781593277574" }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "code":    { "type": "string", "example": "1205" },
+          "message": { "type": "string", "example": "ISBN supplied is not available in Books Collection!" }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/Account/v1/GenerateToken": {
+      "post": {
+        "tags": ["Account"],
+        "summary": "Generate authentication token",
+        "description": "Authenticates a user and returns a Bearer token used for all protected endpoints.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/GenerateTokenRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Token generated successfully",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/GenerateTokenResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Account/v1/User/{userId}": {
+      "get": {
+        "tags": ["Account"],
+        "summary": "Get user by ID",
+        "description": "Returns the user profile and their current list of books.",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "4ae39f14-c763-4600-9590-a69a1c2afd1b"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/GetUserResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized — invalid or missing userId",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/BookStore/v1/Books": {
+      "get": {
+        "tags": ["BookStore"],
+        "summary": "Get all books",
+        "description": "Returns the full catalogue of available books. No authentication required.",
+        "responses": {
+          "200": {
+            "description": "List of all books",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/GetBooksResponse" }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["BookStore"],
+        "summary": "Add books to user collection",
+        "description": "Adds one or more books (by ISBN) to the specified user's collection.",
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/PostBooksRequest" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Books added successfully",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PostBooksResponse" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request — invalid ISBN or book already in collection",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["BookStore"],
+        "summary": "Delete all books for a user",
+        "description": "Removes all books from the specified user's collection.",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "UserId",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "4ae39f14-c763-4600-9590-a69a1c2afd1b"
+          }
+        ],
+        "responses": {
+          "204": { "description": "All books deleted successfully" },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/BookStore/v1/Book": {
+      "get": {
+        "tags": ["BookStore"],
+        "summary": "Get a single book by ISBN",
+        "description": "Returns details of a specific book using its ISBN.",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "ISBN",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" },
+            "example": "9781593277574"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Book found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Book" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request — ISBN not found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["BookStore"],
+        "summary": "Delete a specific book from user collection",
+        "description": "Removes a single book (by ISBN) from the specified user's collection.",
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/DeleteBookRequest" }
+            }
+          }
+        },
+        "responses": {
+          "204": { "description": "Book deleted successfully" },
+          "400": {
+            "description": "Bad request — ISBN not in user's collection",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
