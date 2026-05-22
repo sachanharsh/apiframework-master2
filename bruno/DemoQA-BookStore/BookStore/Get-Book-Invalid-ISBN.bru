@@ -1,0 +1,27 @@
+meta {
+  name: Get Book - Invalid ISBN (400)
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/BookStore/v1/Book
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+params:query {
+  ISBN: 0000000000000
+}
+
+tests {
+  res.status == 400
+}

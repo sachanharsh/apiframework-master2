@@ -1,0 +1,27 @@
+meta {
+  name: Delete All Books for User
+  type: http
+  seq: 7
+}
+
+delete {
+  url: {{baseUrl}}/BookStore/v1/Books
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+params:query {
+  UserId: {{userId}}
+}
+
+tests {
+  res.status == 204
+}

@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.List;
 
-import entities.getBooksResponse.Book;
-
 @Data
 @AllArgsConstructor
 public class postbookRequest {

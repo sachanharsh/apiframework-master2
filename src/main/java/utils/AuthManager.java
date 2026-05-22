@@ -4,7 +4,6 @@ import entities.baseEndPoint;
 //import com.gojek.entities.TokenResponse;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
-import io.restassured.specification.RequestSpecification;
 import properties.PropertiesReader;
 
 import java.time.Instant;

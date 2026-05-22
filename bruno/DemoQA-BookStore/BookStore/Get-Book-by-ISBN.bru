@@ -1,0 +1,28 @@
+meta {
+  name: Get Book by ISBN
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/BookStore/v1/Book
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+params:query {
+  ISBN: 9781593277574
+}
+
+tests {
+  res.status == 200
+  res.body.title == "Understanding ECMAScript 6"
+}

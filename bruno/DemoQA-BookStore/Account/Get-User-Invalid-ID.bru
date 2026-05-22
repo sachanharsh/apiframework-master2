@@ -1,0 +1,23 @@
+meta {
+  name: Get User - Invalid ID (401)
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/Account/v1/User/invalid-user-id-00000
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+headers {
+  Content-Type: application/json
+}
+
+tests {
+  res.status == 401
+}

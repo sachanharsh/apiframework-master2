@@ -6,7 +6,6 @@ import entities.baseEndPoint;
 import utils.ConfigManager;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
-import io.restassured.specification.RequestSpecification;
 
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
